@@ -30,17 +30,19 @@ dependencies {
     // Lombok (Kotlin DSL 스타일)
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
-
+    // Mustache
     // DB & JPA
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.mariadb.jdbc:mariadb-java-client")
     runtimeOnly("com.h2database:h2") // runtimeOnly 권장
 
     // Security & Session
-   // implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-  //  implementation("org.springframework.session:spring-session-jdbc")
+    // Security 핵심 의존성 직접 추가
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    implementation("org.springframework.session:spring-session-jdbc")
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
- //   testImplementation("org.springframework.security:spring-security-test")
+    testImplementation("org.springframework.security:spring-security-test")
 }
