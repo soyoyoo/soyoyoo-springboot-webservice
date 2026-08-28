@@ -12,6 +12,7 @@ import org.springframework.security.web.header.writers.frameoptions.XFrameOption
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 
 @RequiredArgsConstructor
 @EnableWebSecurity  // Spring Security를 활성화
@@ -55,6 +56,17 @@ public class SecurityConfig {
                 );
 
         return http.build();
+    }
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        // /profile 및 정적 리소스는 Security 필터 체인 자체를 거치지 않고 바로 통과!
+        return (web) -> web.ignoring().requestMatchers(
+                AntPathRequestMatcher.antMatcher("/profile"),
+                AntPathRequestMatcher.antMatcher("/css/**"),
+                AntPathRequestMatcher.antMatcher("/js/**"),
+                AntPathRequestMatcher.antMatcher("/images/**"),
+                AntPathRequestMatcher.antMatcher("/h2-console/**")
+        );
     }
 
 }
