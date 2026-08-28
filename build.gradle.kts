@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "org.soyoyoo"
-version = "1.0.4-SNAPSHOT-" + SimpleDateFormat("yyyyMMddHHmmss").format(Date())
+version = "1.0.5-SNAPSHOT-" + SimpleDateFormat("yyyyMMddHHmmss").format(Date())
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21 // Spring Boot 3.x 필수 사양 (Java 17 이상)
