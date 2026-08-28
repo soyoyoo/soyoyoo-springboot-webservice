@@ -49,9 +49,8 @@ jobs:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
-        source: "build/libs/*.jar,deploy.sh" # 배포에 필요한 파일 지정
-        target: "/home/ec2-user/app/step2/" # EC2 내 대상 디렉토리
-        strip_components: 2
+        source: "build/libs/*.jar,deploy.sh,scripts/*.sh" # 배포에 필요한 파일 지정
+        target: "/home/ec2-user/app/step3/" # EC2 내 대상 디렉토리
 
     # 7. EC2에서 배포 스크립트 실행 (SSH)
     - name: Execute Deploy Script on EC2 via SSH
@@ -61,6 +60,14 @@ jobs:
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          cd /home/ec2-user/app/step2
-          chmod +x deploy.sh
+          script: |
+          cd /home/ec2-user/app/step3
+          # 전달받은 scripts 폴더 내 스크립트들과 JAR 파일 복사/이동 처리
+          cp ./build/libs/*.jar ./
+          cp ./scripts/*.sh ./
+          
+          # 모든 shell 스크립트에 실행 권한 부여
+          chmod +x *.sh
+          
+          # 무중단 배포 진입점 스크립트 실행 (보통 deploy.sh)
           ./deploy.sh
