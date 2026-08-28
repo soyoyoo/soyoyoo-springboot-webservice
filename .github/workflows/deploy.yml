@@ -42,17 +42,17 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
 
-    # 6. EC2 인스턴스로 빌드 결과물(JAR) 및 deploy.sh 전달 (SCP)
+      # 6. EC2 인스턴스로 빌드 결과물(JAR) 및 scripts/ 내 스크립트 전달 (SCP)
     - name: Transfer Files to EC2 via SCP
       uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
-        source: "build/libs/*.jar,deploy.sh,scripts/*.sh" # 배포에 필요한 파일 지정
-        target: "/home/ec2-user/app/step3/" # EC2 내 대상 디렉토리
+        source: "build/libs/*.jar,scripts/*.sh"
+        target: "/home/ec2-user/app/step3" # (계정명이 ec2-user가 맞는지 확인!)
 
-    # 7. EC2에서 배포 스크립트 실행 (SSH)
+      # 7. EC2에서 무중단 배포 스크립트 실행 (SSH)
     - name: Execute Deploy Script on EC2 via SSH
       uses: appleboy/ssh-action@v1.0.3
       with:
@@ -60,14 +60,12 @@ jobs:
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          script: |
           cd /home/ec2-user/app/step3
-          # 전달받은 scripts 폴더 내 스크립트들과 JAR 파일 복사/이동 처리
-          cp ./build/libs/*.jar ./
-          cp ./scripts/*.sh ./
           
-          # 모든 shell 스크립트에 실행 권한 부여
+          # SCP로 복사되어 들어온 파일들 위치 확인 후 루트로 이동
+          cp ./build/libs/*.jar ./ 2>/dev/null || true
+          cp ./scripts/*.sh ./ 2>/dev/null || true
+          
+          # 권한 부여 및 배포 실행
           chmod +x *.sh
-          
-          # 무중단 배포 진입점 스크립트 실행 (보통 deploy.sh)
           ./deploy.sh
