@@ -51,7 +51,7 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         source: "build/libs/*.jar,deploy.sh" # 배포에 필요한 파일 지정
         target: "/home/ec2-user/app/step2/" # EC2 내 대상 디렉토리
-        strip_components: 0
+        strip_components: 2
 
     # 7. EC2에서 배포 스크립트 실행 (SSH)
     - name: Execute Deploy Script on EC2 via SSH
