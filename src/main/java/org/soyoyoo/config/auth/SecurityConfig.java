@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .authorizeHttpRequests(auth -> auth
                         // antMatcher(...)로 감싸서 명시적 지정!
-                        .requestMatchers(antMatcher("/"), antMatcher("/css/**"), antMatcher("/images/**"), antMatcher("/js/**"), antMatcher("/h2-console/**")).permitAll()
+                        .requestMatchers(antMatcher("/"), antMatcher("/css/**"), antMatcher("/images/**"), antMatcher("/js/**"), antMatcher("/h2-console/**"), antMatcher("/profile")).permitAll()
                         .requestMatchers(antMatcher("/api/v1/**")).hasRole(Role.USER.name())
                         .anyRequest().authenticated()
                 )
