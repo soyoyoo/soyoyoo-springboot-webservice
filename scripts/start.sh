@@ -28,7 +28,7 @@ IDLE_PROFILE=$(find_idle_profile)
 
 nohup java \
     -Dspring.config.location=classpath:/application.properties,/home/ec2-user/app/application-oauth.properties,/home/ec2-user/app/application-real-db.properties,classpath:/application-$IDLE_PROFILE.properties \
-    -Dspring.profiles.active=real \
+    -Dspring.profiles.active=$IDLE_PROFILE \
     -jar $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
 
 
